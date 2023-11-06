@@ -1,0 +1,36 @@
+# PIPELINE DEFINITION
+# Name: mnist-pipeline
+# Description: Food, Plant Classification Model Pipeline
+components:
+  comp-data-download:
+    executorLabel: exec-data-download
+    outputDefinitions:
+      parameters:
+        output_paths:
+          parameterType: STRING
+deploymentSpec:
+  executors:
+    exec-data-download:
+      container:
+        args:
+        - --output-path
+        - '{{$.outputs.parameters[''output_paths''].output_file}}'
+        command:
+        - python
+        - app.py
+        image: 129231402580.dkr.ecr.ap-northeast-1.amazonaws.com/components:data-download-prod
+pipelineInfo:
+  description: Food, Plant Classification Model Pipeline
+  name: mnist-pipeline
+root:
+  dag:
+    tasks:
+      data-download:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: comp-data-download
+        taskInfo:
+          name: data-download
+schemaVersion: 2.1.0
+sdkVersion: kfp-2.4.0
