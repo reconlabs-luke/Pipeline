@@ -1,0 +1,9 @@
+apiVersion: v1
+appVersion: 0.3.0
+description: MLflow tracking server with external backend-store and artifacts-store
+home: https://github.com/mlops-for-all/helm-charts
+icon: https://mlflow.org/docs/latest/_static/MLflow-logo-final-black.png
+keywords:
+- mlflow
+name: mlflow-server
+version: 0.3.0

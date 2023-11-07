@@ -1,5 +1,19 @@
 # Pipeline
 
+## MinIO
+```bash
+helm install --create-namespace --set resources.requests.memory=512Mi --set replicas=1 --set persistence.enabled=false --set mode=standalone --set rootUser=mlops,rootPassword=mlops123 --generate-name minio/minio
+```
+
+## Mlflow
+```bash
+helm install postgresql-ha ./postgresql-ha -n postgresql --create-namespace
+```
+
+```bash
+helm install mlflow-system ./mlflow-server -n mlflow-system --create-namespace
+```
+
 ## Kubeflow pipeline 설치
 
 ```bash

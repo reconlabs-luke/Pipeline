@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ .Release.Namespace | quote }}
+  name: mlflow-server
+  labels:
+    app.kubernetes.io/name: mlflow-server
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: mlflow-server
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: mlflow-server
+    spec:
+      containers:
+        - name: mlflow-server
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: "{{ .Values.image.pullPolicy }}"
+          ports:
+            - containerPort: 5000
+              name: http
+              protocol: TCP
+          env:
+            - name: "MLFLOW_BACKEND_STORE_URI"
+              value: {{ .Values.db.backendStoreUri }}
+            - name: "MLFLOW_S3_ENDPOINT_URL"
+              value: {{ .Values.s3.endpointUrl }}
+            - name: "AWS_ACCESS_KEY_ID"
+              value: {{ .Values.s3.accessKeyId }}
+            - name: "AWS_SECRET_ACCESS_KEY"
+              value: {{ .Values.s3.secretAccessKey }}
+            - name: "AWS_BUCKET"
+              value: {{ .Values.s3.bucket }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
